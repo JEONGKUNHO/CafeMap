@@ -8,8 +8,15 @@
 import SwiftUI
 
 struct HomeView: View {
+    @StateObject private var viewModel = HomeViewModel()
+    
     var body: some View {
         Text("ホーム")
+            .onAppear {
+                Task {
+                    await viewModel.fetchNearbyPlaces()
+                }
+            }
     }
 }
 

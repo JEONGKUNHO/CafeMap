@@ -6,9 +6,17 @@
 //
 
 import SwiftUI
+import GooglePlaces
 
 @main
 struct CafeMapApp: App {
+    
+    init() {
+        if let apiKey = Bundle.main.object(forInfoDictionaryKey: "GOOGLE_API_KEY") as? String {
+            GMSPlacesClient.provideAPIKey(apiKey)
+        }
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
