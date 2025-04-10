@@ -10,15 +10,20 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         TabView {
-            Tab("ホーム", systemImage: "house") {
-                HomeView()
-            }
-            Tab("ブックマーク", systemImage: "bookmark") {
-                BookMarkView()
-            }
-            Tab("マイページ", systemImage: "person") {
-                MyPageView()
-            }
+            HomeView()
+                .tabItem {
+                    Label("ホーム", systemImage: "house")
+                }
+            
+            BookMarkView()
+                .tabItem {
+                    Label("ブックマーク", systemImage: "bookmark")
+                }
+            
+            MyPageView()
+                .tabItem {
+                    Label("マイページ", systemImage: "person")
+                }
         }
     }
 }

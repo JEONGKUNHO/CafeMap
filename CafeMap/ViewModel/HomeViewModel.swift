@@ -8,20 +8,22 @@
 import Foundation
 import CoreLocation
 import GooglePlacesSwift
+import MapKit
 
 @MainActor
 final class HomeViewModel: ObservableObject {
-    @Published var places: [Place] = []
+    @Published var places: [CafePlace] = []
+    @Published var currentRegion: MKCoordinateRegion?
 
-    func fetchNearbyPlaces() async {
+    func fetchNearbyPlaces(at coordinate: CLLocationCoordinate2D) async {
         let restriction = CircularCoordinateRegion(
-            center: CLLocationCoordinate2D(latitude: 35.7765251, longitude: 139.8319541),
+            center: coordinate,
             radius: 500
         )
 
         let searchNearbyRequest = SearchNearbyRequest(
             locationRestriction: restriction,
-            placeProperties: [ .displayName, .coordinate ],
+            placeProperties: [.placeID, .coordinate],
             includedPrimaryTypes: [
                 PlaceType(rawValue: "cafe"),
                 PlaceType(rawValue: "coffee_shop"),
@@ -36,9 +38,13 @@ final class HomeViewModel: ObservableObject {
 
         switch result {
         case .success(let fetchedPlaces):
-            self.places = fetchedPlaces
+            self.places = fetchedPlaces.compactMap { $0.asCafePlace() }
+            self.currentRegion = MKCoordinateRegion(
+                center: coordinate,
+                span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+            )
         case .failure(let error):
-            print(error)
+            print("Places API Error: \(error)")
         }
     }
 }
