@@ -27,6 +27,11 @@ struct HomeView: View {
                             .foregroundColor(.red)
                             .imageScale(.large)
                     }
+                    .onTapGesture {
+                        Task {
+                            await viewModel.fetchDetailPlace(id: place.id)
+                        }
+                    }
                 }
             }
             .ignoresSafeArea(edges: .top)

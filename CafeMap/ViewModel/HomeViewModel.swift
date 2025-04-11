@@ -14,13 +14,13 @@ import MapKit
 final class HomeViewModel: ObservableObject {
     @Published var places: [CafePlace] = []
     @Published var currentRegion: MKCoordinateRegion?
-
+    
     func fetchNearbyPlaces(at coordinate: CLLocationCoordinate2D) async {
         let restriction = CircularCoordinateRegion(
             center: coordinate,
             radius: 500
         )
-
+        
         let searchNearbyRequest = SearchNearbyRequest(
             locationRestriction: restriction,
             placeProperties: [.placeID, .coordinate],
@@ -33,9 +33,9 @@ final class HomeViewModel: ObservableObject {
             ],
             regionCode: "jp"
         )
-
+        
         let result = await PlacesClient.shared.searchNearby(with: searchNearbyRequest)
-
+        
         switch result {
         case .success(let fetchedPlaces):
             self.places = fetchedPlaces.compactMap { $0.asCafePlace() }
@@ -45,6 +45,22 @@ final class HomeViewModel: ObservableObject {
             )
         case .failure(let error):
             print("Places API Error: \(error)")
+        }
+    }
+    
+    func fetchDetailPlace(id placeID: String) async {
+        let fetchPlaceRequest = FetchPlaceRequest(
+            placeID: placeID,
+            placeProperties: [.all]
+        )
+        
+        let result = await PlacesClient.shared.fetchPlace(with: fetchPlaceRequest)
+        
+        switch result {
+        case .success(let fetchedPlace):
+            print(fetchedPlace)
+        case .failure(let error):
+            print("Place Detail API Error: \(error)")
         }
     }
 }
