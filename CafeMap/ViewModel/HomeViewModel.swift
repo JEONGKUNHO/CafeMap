@@ -23,7 +23,7 @@ final class HomeViewModel: ObservableObject {
         
         let searchNearbyRequest = SearchNearbyRequest(
             locationRestriction: restriction,
-            placeProperties: [.placeID, .coordinate],
+            placeProperties: [.placeID, .coordinate, .displayName],
             includedPrimaryTypes: [
                 PlaceType(rawValue: "cafe"),
                 PlaceType(rawValue: "coffee_shop"),

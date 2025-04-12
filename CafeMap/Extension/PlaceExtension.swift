@@ -9,6 +9,6 @@ import GooglePlacesSwift
 
 extension Place {
     func asCafePlace() -> CafePlace {
-        return CafePlace(id: self.placeID ?? String(), coordinate: self.location)
+        return CafePlace(id: self.placeID ?? String(), coordinate: self.location, displayName: self.displayName ?? String())
     }
 }

@@ -14,33 +14,22 @@ struct HomeView: View {
     
     var body: some View {
         VStack {
-            Map(coordinateRegion: .constant(viewModel.currentRegion ?? MKCoordinateRegion(
-                center: CLLocationCoordinate2D(latitude: 35.6812715, longitude: 139.6846647), // デフォルトは東京駅
-                span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
-            )),
-                showsUserLocation: true,
-                annotationItems: viewModel.places)
-            { place in
-                MapAnnotation(coordinate: place.coordinate) {
-                    VStack {
-                        Image(systemName: "mappin.circle.fill")
-                            .foregroundColor(.red)
-                            .imageScale(.large)
-                    }
-                    .onTapGesture {
+            if let region = viewModel.currentRegion {
+                CustomMapView(
+                    region: region,
+                    places: viewModel.places,
+                    onAnnotationTap: { place in
                         Task {
                             await viewModel.fetchDetailPlace(id: place.id)
                         }
                     }
-                }
+                )
+                .ignoresSafeArea(edges: .top)
             }
-            .ignoresSafeArea(edges: .top)
         }
-        .onReceive(locationManager.$currentLocation) { location in
-            if let location = location {
-                Task {
-                    await viewModel.fetchNearbyPlaces(at: location)
-                }
+        .onReceive(locationManager.$currentLocation.compactMap { $0 }) { location in
+            Task {
+                await viewModel.fetchNearbyPlaces(at: location)
             }
         }
     }
