@@ -23,7 +23,6 @@ struct CustomMapView: UIViewRepresentable {
         
         mapView.pointOfInterestFilter = .excludingAll
         mapView.showsUserLocation = true
-        mapView.showsUserTrackingButton = true
         mapView.setRegion(region, animated: false)
         
         return mapView
