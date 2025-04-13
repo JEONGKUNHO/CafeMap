@@ -12,6 +12,9 @@ struct CustomMapView: UIViewRepresentable {
     var region: MKCoordinateRegion
     var places: [CafePlace]
     var onAnnotationTap: (CafePlace) -> Void
+    @Binding var currentLocation: CLLocationCoordinate2D?
+    @Binding var isMapDragged: Bool
+    @Binding var reloadButtonClicked: Bool
     
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
@@ -21,15 +24,15 @@ struct CustomMapView: UIViewRepresentable {
         let mapView = MKMapView()
         mapView.delegate = context.coordinator
         
-        mapView.pointOfInterestFilter = .excludingAll
+        mapView.pointOfInterestFilter = MKPointOfInterestFilter(including: [.publicTransport])
         mapView.showsUserLocation = true
-        mapView.setRegion(region, animated: false)
+        mapView.setRegion(region, animated: true)
         
         return mapView
     }
     
     func updateUIView(_ mapView: MKMapView, context: Context) {
-        mapView.setRegion(region, animated: true)
+        guard reloadButtonClicked || mapView.annotations.isEmpty else { return }
         
         mapView.removeAnnotations(mapView.annotations)
         
@@ -39,6 +42,7 @@ struct CustomMapView: UIViewRepresentable {
             annotation.title = place.displayName
             return annotation
         }
+        
         mapView.addAnnotations(annotations)
     }
     
@@ -63,41 +67,59 @@ struct CustomMapView: UIViewRepresentable {
             let identifier = "CustomAnnotation"
             var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
             
+            let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .bold)
+            let iconImage = UIImage(systemName: "mappin.circle.fill", withConfiguration: config)?
+                .withTintColor(.red, renderingMode: .alwaysOriginal)
+            let imageView = UIImageView(image: iconImage)
+            imageView.contentMode = .scaleAspectFit
+            
+            let label = UILabel()
+            label.font = UIFont.systemFont(ofSize: 10)
+            label.textAlignment = .center
+            label.textColor = .black
+            label.numberOfLines = 1
+            
+            if let customAnnotation = annotation as? CustomAnnotation {
+                label.text = customAnnotation.title
+            }
+            
+            let stackView = UIStackView(arrangedSubviews: [imageView, label])
+            stackView.axis = .vertical
+            stackView.alignment = .center
+            stackView.spacing = 2
+            stackView.translatesAutoresizingMaskIntoConstraints = false
+            
             if annotationView == nil {
                 annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: identifier)
                 annotationView?.canShowCallout = false
                 annotationView?.isEnabled = true
-                
-                let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .bold)
-                let iconImage = UIImage(systemName: "mappin.circle.fill", withConfiguration: config)?
-                    .withTintColor(.red, renderingMode: .alwaysOriginal)
-                let imageView = UIImageView(image: iconImage)
-                imageView.contentMode = .scaleAspectFit
-                
-                let label = UILabel()
-                label.text = annotation.title ?? ""
-                label.font = UIFont.systemFont(ofSize: 10)
-                label.textAlignment = .center
-                label.textColor = .black
-                label.numberOfLines = 1
-                
-                let stackView = UIStackView(arrangedSubviews: [imageView, label])
-                stackView.axis = .vertical
-                stackView.alignment = .center
-                stackView.spacing = 2
-                
-                stackView.translatesAutoresizingMaskIntoConstraints = false
-                annotationView?.addSubview(stackView)
-                
-                NSLayoutConstraint.activate([
-                    stackView.centerXAnchor.constraint(equalTo: annotationView!.centerXAnchor),
-                    stackView.centerYAnchor.constraint(equalTo: annotationView!.centerYAnchor)
-                ])
+            } else {
+                annotationView?.subviews.forEach { $0.removeFromSuperview() }
+                annotationView?.annotation = annotation
             }
+            
+            annotationView?.addSubview(stackView)
+            
+            NSLayoutConstraint.activate([
+                stackView.centerXAnchor.constraint(equalTo: annotationView!.centerXAnchor),
+                stackView.centerYAnchor.constraint(equalTo: annotationView!.centerYAnchor)
+            ])
             
             return annotationView
         }
         
+        
+        func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+            if parent.region.center.latitude.rounded(toPlaces: 5) != mapView.centerCoordinate.latitude.rounded(toPlaces: 5)
+                && parent.region.center.longitude.rounded(toPlaces: 5) != mapView.centerCoordinate.longitude.rounded(toPlaces: 5) {
+                parent.isMapDragged = true
+                parent.currentLocation = mapView.centerCoordinate
+            }
+        }
+        
+        func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
+            parent.reloadButtonClicked = false
+        }
     }
     
     class CustomAnnotation: NSObject, MKAnnotation {
