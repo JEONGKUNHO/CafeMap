@@ -15,6 +15,7 @@ struct CustomMapView: UIViewRepresentable {
     @Binding var currentLocation: CLLocationCoordinate2D?
     @Binding var isMapDragged: Bool
     @Binding var reloadButtonClicked: Bool
+    @Binding var moveToUserLocation: Bool
     
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
@@ -32,6 +33,16 @@ struct CustomMapView: UIViewRepresentable {
     }
     
     func updateUIView(_ mapView: MKMapView, context: Context) {
+        if moveToUserLocation {
+            mapView.setRegion(
+                MKCoordinateRegion(
+                    center: mapView.userLocation.coordinate,
+                    span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)),
+                animated: true
+            )
+            moveToUserLocation = false
+        }
+        
         guard reloadButtonClicked || mapView.annotations.isEmpty else { return }
         
         mapView.removeAnnotations(mapView.annotations)

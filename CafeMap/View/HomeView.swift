@@ -14,6 +14,7 @@ struct HomeView: View {
     @State private var currentLocation: CLLocationCoordinate2D?
     @State private var isMapDragged: Bool = false
     @State private var reloadButtonClicked = false
+    @State private var moveToUserLocation = false
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -28,7 +29,8 @@ struct HomeView: View {
                     },
                     currentLocation: $currentLocation,
                     isMapDragged: $isMapDragged,
-                    reloadButtonClicked: $reloadButtonClicked
+                    reloadButtonClicked: $reloadButtonClicked,
+                    moveToUserLocation: $moveToUserLocation
                 )
                 .ignoresSafeArea(edges: .top)
                 
@@ -47,6 +49,20 @@ struct HomeView: View {
                     .background(Color.white)
                     .cornerRadius(25)
                     .padding(.bottom, 16)
+                    
+                    HStack {
+                        Spacer()
+                        Image(systemName: "location.fill")
+                            .padding()
+                            .foregroundStyle(Color.blue)
+                            .background(Color.white)
+                            .clipShape(Circle())
+                            .shadow(radius: 2)
+                            .padding(12)
+                            .onTapGesture {
+                                moveToUserLocation = true
+                            }
+                    }
                 }
             }
         }
