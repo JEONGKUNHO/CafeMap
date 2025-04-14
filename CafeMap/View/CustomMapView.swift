@@ -67,6 +67,12 @@ struct CustomMapView: UIViewRepresentable {
         func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
             if let annotation = view.annotation as? CustomAnnotation {
                 parent.onAnnotationTap(annotation.place)
+                
+                let newRegion = MKCoordinateRegion(
+                    center: annotation.coordinate,
+                    span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+                )
+                mapView.setRegion(newRegion, animated: true)
             }
         }
         
