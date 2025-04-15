@@ -15,6 +15,7 @@ struct HomeView: View {
     @State private var isMapDragged: Bool = false
     @State private var reloadButtonClicked = false
     @State private var moveToUserLocation = false
+    @State private var showPlaceModal = false
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -25,6 +26,7 @@ struct HomeView: View {
                     onAnnotationTap: { place in
                         Task {
                             await viewModel.fetchDetailPlace(id: place.id)
+                            showPlaceModal = true
                         }
                     },
                     currentLocation: $currentLocation,
@@ -71,6 +73,22 @@ struct HomeView: View {
                 await viewModel.fetchNearbyPlaces(at: location)
             }
         }
+        .sheet(isPresented: $showPlaceModal) {
+            if let place = viewModel.placeDetail {
+                VStack(spacing: 20) {
+                    Text(place)
+                        .font(.title)
+                        .bold()
+                    Button("閉じる") {
+                        showPlaceModal = false
+                    }
+                }
+                .padding()
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
+            }
+        }
+
     }
 }
 
