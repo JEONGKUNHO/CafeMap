@@ -37,7 +37,7 @@ struct CustomMapView: UIViewRepresentable {
             mapView.setRegion(
                 MKCoordinateRegion(
                     center: mapView.userLocation.coordinate,
-                    span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)),
+                    span: MKCoordinateSpan(latitudeDelta: mapView.region.span.latitudeDelta, longitudeDelta: mapView.region.span.longitudeDelta)),
                 animated: true
             )
             moveToUserLocation = false
@@ -70,9 +70,11 @@ struct CustomMapView: UIViewRepresentable {
                 
                 let newRegion = MKCoordinateRegion(
                     center: annotation.coordinate,
-                    span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+                    span: MKCoordinateSpan(latitudeDelta: mapView.region.span.latitudeDelta, longitudeDelta: mapView.region.span.longitudeDelta)
                 )
                 mapView.setRegion(newRegion, animated: true)
+                
+                mapView.deselectAnnotation(annotation, animated: false)
             }
         }
         

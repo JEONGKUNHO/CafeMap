@@ -75,16 +75,22 @@ struct HomeView: View {
         }
         .sheet(isPresented: $showPlaceModal) {
             if let place = viewModel.placeDetail {
-                VStack(spacing: 20) {
-                    Text(place)
-                        .font(.title)
-                        .bold()
-                    Button("閉じる") {
-                        showPlaceModal = false
+                VStack {
+                    HStack(alignment: .top) {
+                        Text(place.displayName ?? String())
+                            .font(.system(size: 24, weight: .semibold))
+                            .lineLimit(2)
+                        Spacer().frame(width: 24)
+                        Image(systemName: "xmark.circle")
+                            .font(.system(size: 24))
+                            .onTapGesture {
+                                showPlaceModal = false
+                            }
                     }
+                    Spacer()
                 }
                 .padding()
-                .presentationDetents([.medium, .large])
+                .presentationDetents([.medium, .fraction(0.999)])
                 .presentationDragIndicator(.visible)
             }
         }

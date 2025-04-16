@@ -14,7 +14,7 @@ import MapKit
 final class HomeViewModel: ObservableObject {
     @Published var places: [CafePlace] = []
     @Published var currentRegion: MKCoordinateRegion?
-    @Published var placeDetail: String? = nil
+    @Published var placeDetail: Place? = nil
     
     func fetchNearbyPlaces(at coordinate: CLLocationCoordinate2D) async {
         let restriction = CircularCoordinateRegion(
@@ -60,7 +60,7 @@ final class HomeViewModel: ObservableObject {
         switch result {
         case .success(let fetchedPlace):
             print(fetchedPlace)
-            placeDetail = fetchedPlace.displayName
+            placeDetail = fetchedPlace
         case .failure(let error):
             print("Place Detail API Error: \(error)")
         }
