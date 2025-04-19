@@ -65,4 +65,21 @@ final class HomeViewModel: ObservableObject {
             print("Place Detail API Error: \(error)")
         }
     }
+    
+    func searchPlaces(keyword: String) async -> CLLocationCoordinate2D {
+        let request = MKLocalSearch.Request()
+        request.naturalLanguageQuery = keyword
+        request.resultTypes = .pointOfInterest
+        request.pointOfInterestFilter = MKPointOfInterestFilter(including: [.publicTransport])
+        
+        let search = MKLocalSearch(request: request)
+        
+        do {
+            let response = try await search.start()
+            return response.boundingRegion.center
+        } catch {
+            print("検索エラー: \(error.localizedDescription)")
+            return currentRegion?.center ?? CLLocationCoordinate2D()
+        }
+    }
 }

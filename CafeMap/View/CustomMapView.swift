@@ -13,6 +13,7 @@ struct CustomMapView: UIViewRepresentable {
     var places: [CafePlace]
     var onAnnotationTap: (CafePlace) -> Void
     @Binding var currentLocation: CLLocationCoordinate2D?
+    @Binding var searchedLocation: CLLocationCoordinate2D?
     @Binding var isMapDragged: Bool
     @Binding var reloadButtonClicked: Bool
     @Binding var moveToUserLocation: Bool
@@ -41,6 +42,15 @@ struct CustomMapView: UIViewRepresentable {
                 animated: true
             )
             moveToUserLocation = false
+        }
+        
+        if let searchedLocation = searchedLocation {
+            let newRegion = MKCoordinateRegion(
+                center: searchedLocation,
+                span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+            )
+            mapView.setRegion(newRegion, animated: true)
+            self.searchedLocation = nil
         }
         
         guard reloadButtonClicked || mapView.annotations.isEmpty else { return }

@@ -12,15 +12,60 @@ struct HomeView: View {
     @StateObject private var viewModel = HomeViewModel()
     @StateObject private var locationManager = LocationManager()
     @State private var currentLocation: CLLocationCoordinate2D?
+    @State private var searchedLocation: CLLocationCoordinate2D?
     @State private var isMapDragged: Bool = false
     @State private var reloadButtonClicked = false
     @State private var moveToUserLocation = false
+    @State private var searchByText = false
     @State private var showPlaceModal = false
     @State private var isExpanded = false
+    @State private var searchText = ""
+    @FocusState private var isSearchFocused: Bool
     
     var body: some View {
         ZStack(alignment: .bottom) {
             if let region = viewModel.currentRegion {
+                //　検索バー
+                VStack {
+                    ZStack {
+                        HStack {
+                            TextField(isSearchFocused ? String() : "🔎　ここで駅を検索", text: $searchText)
+                                .padding(12)
+                                .background(Color.white)
+                                .cornerRadius(10)
+                                .shadow(color: .gray.opacity(0.3), radius: 4, x: 0, y: 2)
+                                .padding(.horizontal)
+                                .focused($isSearchFocused)
+                                .submitLabel(.search)
+                                .onSubmit {
+                                    Task {
+                                        if !searchText.isEmpty {
+                                            let refinedText = searchText.replacingOccurrences(of: "駅", with: String()).trimmingCharacters(in: .whitespaces)
+                                            isSearchFocused = false
+                                            let searchedLocation = await viewModel.searchPlaces(keyword: refinedText)
+                                            self.searchedLocation = searchedLocation
+                                            searchText = String()
+                                        }
+                                    }
+                                }
+                        }
+                        HStack {
+                            if !searchText.isEmpty && isSearchFocused {
+                                Spacer()
+                                Image(systemName: "xmark.circle")
+                                    .font(.system(size: 24))
+                                    .padding(.trailing, 24)
+                                    .onTapGesture {
+                                        searchText = String()
+                                    }
+                            }
+                        }
+                        .zIndex(1)
+                    }
+                    Spacer()
+                }
+                .zIndex(1)
+                //　マップ
                 CustomMapView(
                     region: region,
                     places: viewModel.places,
@@ -31,7 +76,7 @@ struct HomeView: View {
                         }
                     },
                     currentLocation: $currentLocation,
-                    isMapDragged: $isMapDragged,
+                    searchedLocation: $searchedLocation, isMapDragged: $isMapDragged,
                     reloadButtonClicked: $reloadButtonClicked,
                     moveToUserLocation: $moveToUserLocation
                 )
@@ -69,6 +114,7 @@ struct HomeView: View {
                 }
             }
         }
+        .ignoresSafeArea(.keyboard)
         .onReceive(locationManager.$currentLocation.compactMap { $0 }) { location in
             Task {
                 await viewModel.fetchNearbyPlaces(at: location)
