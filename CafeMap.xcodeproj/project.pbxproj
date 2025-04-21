@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		54010BA62DB677B9004752C2 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 54010BA52DB677B9004752C2 /* FirebaseDatabase */; };
+		54010BA82DB677B9004752C2 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 54010BA72DB677B9004752C2 /* FirebaseStorage */; };
 		54DAB2292DA2799C004E6743 /* GooglePlaces in Frameworks */ = {isa = PBXBuildFile; productRef = 54DAB2282DA2799C004E6743 /* GooglePlaces */; };
 		54DAB22B2DA2799C004E6743 /* GooglePlacesSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 54DAB22A2DA2799C004E6743 /* GooglePlacesSwift */; };
 /* End PBXBuildFile section */
@@ -70,6 +72,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				54010BA62DB677B9004752C2 /* FirebaseDatabase in Frameworks */,
+				54010BA82DB677B9004752C2 /* FirebaseStorage in Frameworks */,
 				54DAB2292DA2799C004E6743 /* GooglePlaces in Frameworks */,
 				54DAB22B2DA2799C004E6743 /* GooglePlacesSwift in Frameworks */,
 			);
@@ -134,6 +138,8 @@
 			packageProductDependencies = (
 				54DAB2282DA2799C004E6743 /* GooglePlaces */,
 				54DAB22A2DA2799C004E6743 /* GooglePlacesSwift */,
+				54010BA52DB677B9004752C2 /* FirebaseDatabase */,
+				54010BA72DB677B9004752C2 /* FirebaseStorage */,
 			);
 			productName = CafeMap;
 			productReference = 54682BEA2D9D4DB40014F833 /* CafeMap.app */;
@@ -219,6 +225,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				54DAB2272DA2799C004E6743 /* XCRemoteSwiftPackageReference "ios-places-sdk" */,
+				54010BA42DB677B9004752C2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 54682BEB2D9D4DB40014F833 /* Products */;
@@ -595,6 +602,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		54010BA42DB677B9004752C2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.11.0;
+			};
+		};
 		54DAB2272DA2799C004E6743 /* XCRemoteSwiftPackageReference "ios-places-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/googlemaps/ios-places-sdk";
@@ -606,6 +621,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		54010BA52DB677B9004752C2 /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 54010BA42DB677B9004752C2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabase;
+		};
+		54010BA72DB677B9004752C2 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 54010BA42DB677B9004752C2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
 		54DAB2282DA2799C004E6743 /* GooglePlaces */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 54DAB2272DA2799C004E6743 /* XCRemoteSwiftPackageReference "ios-places-sdk" */;
