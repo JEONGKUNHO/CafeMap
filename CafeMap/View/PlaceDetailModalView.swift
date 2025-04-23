@@ -43,7 +43,7 @@ struct PlaceDetailModalView: View {
             }
             .padding(.horizontal, 12)
             
-            // 버튼
+            // ボタン
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
                     Spacer().frame(width: 0)
@@ -64,10 +64,16 @@ struct PlaceDetailModalView: View {
                     ActionButton(icon: "square.and.pencil", text: "レビューを書く", color: .blue) {
                         print("レビューを書く tapped")
                     }
+                    
+                    ActionButton(icon: "camera.fill", text: "写真登録", color: .blue) {
+                        print("写真登録　tapped")
+                    }
+                    
+                    Spacer().frame(width: 12)
                 }
             }
             
-            // 영업시간
+            // 営業時間
             if let openingHours = place.regularOpeningHours {
                 VStack(alignment: .leading, spacing: 8) {
                     Button(action: {
