@@ -116,7 +116,7 @@ struct HomeView: View {
         }
         .ignoresSafeArea(.keyboard)
         .onReceive(locationManager.$currentLocation.compactMap { $0 }) { location in
-            Task {
+            Task(priority: .userInitiated) {
                 await viewModel.fetchNearbyPlaces(at: location)
             }
         }
