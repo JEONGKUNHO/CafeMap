@@ -10,8 +10,9 @@ import GooglePlacesSwift
 
 struct PlaceDetailModalView: View {
     let place: Place
-    @Binding var isExpanded: Bool
     @Binding var showModal: Bool
+    
+    @State private var isExpanded: Bool = false
     
     var body: some View {
         VStack(spacing: 12) {

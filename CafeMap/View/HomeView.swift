@@ -18,7 +18,6 @@ struct HomeView: View {
     @State private var moveToUserLocation = false
     @State private var searchByText = false
     @State private var showPlaceModal = false
-    @State private var isExpanded = false
     @State private var searchText = ""
     @FocusState private var isSearchFocused: Bool
     
@@ -122,7 +121,7 @@ struct HomeView: View {
         }
         .sheet(isPresented: $showPlaceModal) {
             if let place = viewModel.placeDetail {
-                PlaceDetailModalView(place: place, isExpanded: $isExpanded, showModal: $showPlaceModal)
+                PlaceDetailModalView(place: place, showModal: $showPlaceModal)
                     .presentationDetents([.medium, .fraction(0.999)])
                     .presentationDragIndicator(.visible)
             }
