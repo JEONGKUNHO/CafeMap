@@ -10,9 +10,10 @@ import GooglePlacesSwift
 
 struct PlaceDetailModalView: View {
     let place: Place
-    @Binding var showModal: Bool
     
+    @Binding var showModal: Bool
     @State private var isExpanded: Bool = false
+    @State private var showReviewWriteView = false
     
     var body: some View {
         VStack(spacing: 12) {
@@ -63,7 +64,7 @@ struct PlaceDetailModalView: View {
                     }
                     
                     ActionButton(icon: "square.and.pencil", text: "レビューを書く", color: .blue) {
-                        print("レビューを書く tapped")
+                        showReviewWriteView = true
                     }
                     
                     ActionButton(icon: "camera.fill", text: "写真登録", color: .blue) {
@@ -112,6 +113,11 @@ struct PlaceDetailModalView: View {
                 .padding(.horizontal, 12)
             }
             Spacer()
+        }
+        .fullScreenCover(isPresented: $showReviewWriteView) {
+            if let placeID = place.placeID {
+                ReviewWriteView(placeID: placeID)
+            }
         }
     }
 }
