@@ -9,6 +9,7 @@ import SwiftUI
 import GooglePlacesSwift
 
 struct PlaceDetailModalView: View {
+    let viewModel: HomeViewModel
     let place: Place
     
     @Binding var showModal: Bool
@@ -116,7 +117,7 @@ struct PlaceDetailModalView: View {
         }
         .fullScreenCover(isPresented: $showReviewWriteView) {
             if let placeID = place.placeID {
-                ReviewWriteView(placeID: placeID)
+                ReviewWriteView(viewModel: viewModel, placeID: placeID)
             }
         }
     }

@@ -10,12 +10,14 @@ import SwiftUI
 struct ReviewWriteView: View {
     @Environment(\.dismiss) private var dismiss
 
+    let viewModel: HomeViewModel
     let placeID: String
     @State private var serviceRating: Int = 0
     @State private var cleanlinessRating: Int = 0
     @State private var tasteRating: Int = 0
     @State private var reviewText: String = String()
     @State private var showError: Bool = false
+    @State private var errorMessage: String = String()
 
     var body: some View {
         VStack(alignment: .leading, spacing: 32) {
@@ -42,7 +44,7 @@ struct ReviewWriteView: View {
             }
             
             if showError {
-                Text("すべての項目に星をつけてください")
+                Text(errorMessage)
                     .foregroundColor(.red)
                     .font(.subheadline)
             }
@@ -50,10 +52,25 @@ struct ReviewWriteView: View {
             Spacer()
 
             Button(action: {
-                if serviceRating == 0 || cleanlinessRating == 0 || tasteRating == 0 {
-                    showError = true
-                } else {
-                    dismiss()
+                Task {
+                    if serviceRating == 0 || cleanlinessRating == 0 || tasteRating == 0 {
+                        errorMessage = "すべての項目に星をつけてください"
+                        showError = true
+                    } else {
+                        do {
+                            try await viewModel.saveReview(
+                                placeID: placeID,
+                                reviewText: reviewText,
+                                serviceRating: serviceRating,
+                                cleanlinessRating: cleanlinessRating,
+                                tasteRating: tasteRating
+                            )
+                            dismiss()
+                        } catch {
+                            errorMessage = "DBエラーが発生しました"
+                            showError = true
+                        }
+                    }
                 }
             }) {
                 Text("作成する")

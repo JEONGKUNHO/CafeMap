@@ -9,6 +9,8 @@ import Foundation
 import CoreLocation
 import GooglePlacesSwift
 import MapKit
+import FirebaseCore
+import FirebaseFirestore
 
 @MainActor
 final class HomeViewModel: ObservableObject {
@@ -81,5 +83,22 @@ final class HomeViewModel: ObservableObject {
             print("検索エラー: \(error.localizedDescription)")
             return currentRegion?.center ?? CLLocationCoordinate2D()
         }
+    }
+    
+    func saveReview(placeID: String, reviewText: String, serviceRating: Int, cleanlinessRating: Int, tasteRating: Int) async throws {
+        
+        let reviewData: [String: Any] = [
+            "reviewText": reviewText,
+            "serviceRating": serviceRating,
+            "cleanlinessRating": cleanlinessRating,
+            "tasteRating": tasteRating,
+            "createdAt": Date().timeIntervalSince1970
+        ]
+        
+        try await Firestore.firestore()
+            .collection("CafeReviews")
+            .document(placeID)
+            .collection("reviews")
+            .addDocument(data: reviewData)
     }
 }

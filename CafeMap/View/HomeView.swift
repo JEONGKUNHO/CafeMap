@@ -121,7 +121,7 @@ struct HomeView: View {
         }
         .sheet(isPresented: $showPlaceModal) {
             if let place = viewModel.placeDetail {
-                PlaceDetailModalView(place: place, showModal: $showPlaceModal)
+                PlaceDetailModalView(viewModel: viewModel, place: place, showModal: $showPlaceModal)
                     .presentationDetents([.medium, .fraction(0.999)])
                     .presentationDragIndicator(.visible)
             }
