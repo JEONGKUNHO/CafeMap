@@ -92,7 +92,7 @@ final class HomeViewModel: ObservableObject {
             "serviceRating": serviceRating,
             "cleanlinessRating": cleanlinessRating,
             "tasteRating": tasteRating,
-            "createdAt": Date().timeIntervalSince1970
+            "createdAt": Date().toDateString
         ]
         
         try await Firestore.firestore()
