@@ -71,6 +71,7 @@ struct HomeView: View {
                     onAnnotationTap: { place in
                         Task {
                             await viewModel.fetchDetailPlace(id: place.id)
+                            await viewModel.fetchPlaceReview(id: place.id)
                             showPlaceModal = true
                         }
                     },

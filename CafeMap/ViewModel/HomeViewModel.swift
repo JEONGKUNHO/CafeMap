@@ -17,6 +17,7 @@ final class HomeViewModel: ObservableObject {
     @Published var places: [CafePlace] = []
     @Published var currentRegion: MKCoordinateRegion?
     @Published var placeDetail: Place? = nil
+    @Published var cafeReviews: [CafeReview] = []
     
     func fetchNearbyPlaces(at coordinate: CLLocationCoordinate2D) async {
         let restriction = CircularCoordinateRegion(
@@ -61,10 +62,30 @@ final class HomeViewModel: ObservableObject {
         
         switch result {
         case .success(let fetchedPlace):
-            print(fetchedPlace)
             placeDetail = fetchedPlace
         case .failure(let error):
             print("Place Detail API Error: \(error)")
+        }
+    }
+    
+    func fetchPlaceReview(id placeID: String) async {
+        let db = Firestore.firestore()
+        
+        do {
+            let snapshot = try await db
+                .collection("CafeReviews")
+                .document(placeID)
+                .collection("reviews")
+                .order(by: "createdAt", descending: true)
+                .getDocuments()
+            
+            let reviews = try snapshot.documents.compactMap {
+                try $0.data(as: CafeReview.self)
+            }
+            
+            self.cafeReviews = reviews
+        } catch {
+            print(error)
         }
     }
     
@@ -86,8 +107,13 @@ final class HomeViewModel: ObservableObject {
     }
     
     func saveReview(placeID: String, reviewText: String, serviceRating: Int, cleanlinessRating: Int, tasteRating: Int) async throws {
+        let newDocRef = Firestore.firestore()
+             .collection("CafeReviews")
+             .document(placeID)
+             .collection("reviews")
         
         let reviewData: [String: Any] = [
+            "id": newDocRef.document().documentID,
             "reviewText": reviewText,
             "serviceRating": serviceRating,
             "cleanlinessRating": cleanlinessRating,
@@ -95,10 +121,6 @@ final class HomeViewModel: ObservableObject {
             "createdAt": Date().toDateString
         ]
         
-        try await Firestore.firestore()
-            .collection("CafeReviews")
-            .document(placeID)
-            .collection("reviews")
-            .addDocument(data: reviewData)
+        try await newDocRef.addDocument(data: reviewData)
     }
 }
