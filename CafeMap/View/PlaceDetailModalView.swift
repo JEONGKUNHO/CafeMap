@@ -9,7 +9,7 @@ import SwiftUI
 import GooglePlacesSwift
 
 struct PlaceDetailModalView: View {
-    let viewModel: HomeViewModel
+    @StateObject var viewModel: HomeViewModel
     let place: Place
     
     @Binding var showModal: Bool

@@ -10,7 +10,7 @@ import SwiftUI
 struct ReviewWriteView: View {
     @Environment(\.dismiss) private var dismiss
 
-    let viewModel: HomeViewModel
+    @ObservedObject var viewModel: HomeViewModel
     let placeID: String
     @State private var serviceRating: Int = 0
     @State private var cleanlinessRating: Int = 0
@@ -65,6 +65,7 @@ struct ReviewWriteView: View {
                                 cleanlinessRating: cleanlinessRating,
                                 tasteRating: tasteRating
                             )
+                            await viewModel.fetchPlaceReview(id: placeID)
                             dismiss()
                         } catch {
                             errorMessage = "DBエラーが発生しました"
