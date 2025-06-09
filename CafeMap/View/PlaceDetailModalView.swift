@@ -117,12 +117,15 @@ struct PlaceDetailModalView: View {
                 
                 //　レビュー
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("レビュー")
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .padding(.horizontal, 16)
-                        .padding(.top, 8)
-
+                    HStack {
+                        Text("レビュー")
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                            .padding(.horizontal, 16)
+                            .padding(.top, 8)
+                        Spacer()
+                    }
+                    
                     if viewModel.cafeReviews.isEmpty {
                         Text("まだレビューがありません")
                             .foregroundColor(.gray)
@@ -136,7 +139,7 @@ struct PlaceDetailModalView: View {
                         }
                     }
                 }
-
+                
                 Spacer()
             }
         }

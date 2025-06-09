@@ -12,10 +12,12 @@ struct ReviewCell: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("🗣️ \(review.reviewText)")
-                .font(.body)
-                .foregroundColor(.primary)
-                .fixedSize(horizontal: false, vertical: true)
+            if !review.reviewText.isEmpty {
+                Text("🗣️ \(review.reviewText)")
+                    .font(.body)
+                    .foregroundColor(.primary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
 
             HStack(spacing: 16) {
                 Label("\(review.tasteRating)", systemImage: "fork.knife")
