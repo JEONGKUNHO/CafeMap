@@ -11,6 +11,7 @@ import GooglePlacesSwift
 import MapKit
 import FirebaseCore
 import FirebaseFirestore
+import RealmSwift
 
 @MainActor
 final class HomeViewModel: ObservableObject {
@@ -122,5 +123,30 @@ final class HomeViewModel: ObservableObject {
         ]
         
         try await newDocRef.addDocument(data: reviewData)
+    }
+    
+    //　Realm関連関数
+    func isBookmarked(placeID: String) -> Bool {
+        let realm = try! Realm()
+        return realm.object(ofType: Bookmark.self, forPrimaryKey: placeID) != nil
+    }
+    
+    func addBookmark(placeID: String, title: String) {
+        let realm = try! Realm()
+        let bookmark = Bookmark()
+        bookmark.id = placeID
+        bookmark.title = title
+        try! realm.write {
+            realm.add(bookmark)
+        }
+    }
+    
+    func removeBookmark(placeID: String) {
+        let realm = try! Realm()
+        if let existing = realm.object(ofType: Bookmark.self, forPrimaryKey: placeID) {
+            try! realm.write {
+                realm.delete(existing)
+            }
+        }
     }
 }

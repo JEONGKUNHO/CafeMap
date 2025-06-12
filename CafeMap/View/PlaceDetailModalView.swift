@@ -15,6 +15,7 @@ struct PlaceDetailModalView: View {
     @Binding var showModal: Bool
     @State private var isExpanded: Bool = false
     @State private var showReviewWriteView = false
+    @State private var isBookmarked: Bool = false
     
     var body: some View {
         ScrollView {
@@ -34,7 +35,7 @@ struct PlaceDetailModalView: View {
                 .padding(.top, 18)
                 .padding(.horizontal, 12)
                 
-                // 口コミ
+                // 口コミ、ブックマーク
                 HStack(alignment: .bottom, spacing: 0) {
                     if let rating = place.rating {
                         Text("⭐️").padding(.trailing, 4)
@@ -44,6 +45,21 @@ struct PlaceDetailModalView: View {
                             .foregroundColor(.gray)
                     }
                     Spacer()
+                    Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
+                        .frame(width: 24, height: 24)
+                        .foregroundStyle(.blue)
+                        .onTapGesture {
+                            guard let id = place.placeID,
+                                  let title = place.displayName else { return }
+                            
+                            if isBookmarked {
+                                viewModel.removeBookmark(placeID: id)
+                                isBookmarked = false
+                            } else {
+                                viewModel.addBookmark(placeID: id, title: title)
+                                isBookmarked = true
+                            }
+                        }
                 }
                 .padding(.horizontal, 12)
                 
@@ -146,6 +162,11 @@ struct PlaceDetailModalView: View {
         .fullScreenCover(isPresented: $showReviewWriteView) {
             if let placeID = place.placeID {
                 ReviewWriteView(viewModel: viewModel, placeID: placeID)
+            }
+        }
+        .onAppear {
+            if let id = place.placeID {
+                isBookmarked = viewModel.isBookmarked(placeID: id)
             }
         }
     }

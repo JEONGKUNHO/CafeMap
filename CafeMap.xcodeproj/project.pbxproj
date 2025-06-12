@@ -10,6 +10,8 @@
 		54010BA62DB677B9004752C2 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 54010BA52DB677B9004752C2 /* FirebaseDatabase */; };
 		54010BA82DB677B9004752C2 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 54010BA72DB677B9004752C2 /* FirebaseStorage */; };
 		54297CBB2DE2F54F0050B45D /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 54297CBA2DE2F54F0050B45D /* FirebaseFirestore */; };
+		5461C82E2DF71590002697D0 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 5461C82D2DF71590002697D0 /* RealmSwift */; };
+		5461C82F2DF71ABF002697D0 /* RealmSwift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 5461C82D2DF71590002697D0 /* RealmSwift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		54DAB2292DA2799C004E6743 /* GooglePlaces in Frameworks */ = {isa = PBXBuildFile; productRef = 54DAB2282DA2799C004E6743 /* GooglePlaces */; };
 		54DAB22B2DA2799C004E6743 /* GooglePlacesSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 54DAB22A2DA2799C004E6743 /* GooglePlacesSwift */; };
 /* End PBXBuildFile section */
@@ -30,6 +32,20 @@
 			remoteInfo = CafeMap;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5461C8302DF71ABF002697D0 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				5461C82F2DF71ABF002697D0 /* RealmSwift in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		54682BEA2D9D4DB40014F833 /* CafeMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CafeMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,6 +89,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5461C82E2DF71590002697D0 /* RealmSwift in Frameworks */,
 				54010BA62DB677B9004752C2 /* FirebaseDatabase in Frameworks */,
 				54010BA82DB677B9004752C2 /* FirebaseStorage in Frameworks */,
 				54DAB2292DA2799C004E6743 /* GooglePlaces in Frameworks */,
@@ -128,6 +145,7 @@
 				54682BE62D9D4DB40014F833 /* Sources */,
 				54682BE72D9D4DB40014F833 /* Frameworks */,
 				54682BE82D9D4DB40014F833 /* Resources */,
+				5461C8302DF71ABF002697D0 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -143,6 +161,7 @@
 				54010BA52DB677B9004752C2 /* FirebaseDatabase */,
 				54010BA72DB677B9004752C2 /* FirebaseStorage */,
 				54297CBA2DE2F54F0050B45D /* FirebaseFirestore */,
+				5461C82D2DF71590002697D0 /* RealmSwift */,
 			);
 			productName = CafeMap;
 			productReference = 54682BEA2D9D4DB40014F833 /* CafeMap.app */;
@@ -229,6 +248,7 @@
 			packageReferences = (
 				54DAB2272DA2799C004E6743 /* XCRemoteSwiftPackageReference "ios-places-sdk" */,
 				54010BA42DB677B9004752C2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				5461C82C2DF71590002697D0 /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 54682BEB2D9D4DB40014F833 /* Products */;
@@ -613,6 +633,14 @@
 				minimumVersion = 11.11.0;
 			};
 		};
+		5461C82C2DF71590002697D0 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		54DAB2272DA2799C004E6743 /* XCRemoteSwiftPackageReference "ios-places-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/googlemaps/ios-places-sdk";
@@ -638,6 +666,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 54010BA42DB677B9004752C2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
+		};
+		5461C82D2DF71590002697D0 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5461C82C2DF71590002697D0 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
 		};
 		54DAB2282DA2799C004E6743 /* GooglePlaces */ = {
 			isa = XCSwiftPackageProductDependency;
