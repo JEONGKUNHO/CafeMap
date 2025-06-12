@@ -10,7 +10,10 @@ import RealmSwift
 
 struct BookMarkView: View {
     @ObservedResults(Bookmark.self, sortDescriptor: SortDescriptor(keyPath: "date", ascending: false)) var bookmarks
-    
+    @StateObject private var viewModel = HomeViewModel()
+    @State private var showPlaceModal = false
+    @State private var selectedBookmark: Bookmark?
+
     var body: some View {
         NavigationView {
             List {
@@ -26,29 +29,37 @@ struct BookMarkView: View {
                                 .font(.caption)
                                 .foregroundColor(.gray)
                         }
+                        .onTapGesture {
+                            Task {
+                                await viewModel.fetchDetailPlace(id: bookmark.id)
+                                await viewModel.fetchPlaceReview(id: bookmark.id)
+                                selectedBookmark = bookmark
+                                showPlaceModal = true
+                            }
+                        }
                     }
                     .onDelete(perform: deleteBookmark)
                 }
             }
             .navigationTitle("ブックマーク")
         }
-    }
-    
-    private func deleteBookmark(at offsets: IndexSet) {
-        let realm = try! Realm()
-        
-        let itemsToDelete = offsets.map { bookmarks[$0] }
-        
-        try? realm.write {
-            itemsToDelete.forEach { item in
-                if let thawedItem = item.thaw() {
-                    realm.delete(thawedItem)
-                }
+        .sheet(isPresented: $showPlaceModal) {
+            if let place = viewModel.placeDetail {
+                PlaceDetailModalView(
+                    viewModel: viewModel,
+                    place: place,
+                    showModal: $showPlaceModal
+                )
+                .presentationDetents([.medium, .fraction(0.999)])
+                .presentationDragIndicator(.visible)
             }
         }
     }
-}
 
-#Preview {
-    BookMarkView()
+    private func deleteBookmark(at offsets: IndexSet) {
+        let itemsToDelete = offsets.map { bookmarks[$0] }
+        itemsToDelete.forEach { item in
+            viewModel.removeBookmark(placeID: item.id)
+        }
+    }
 }
