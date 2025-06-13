@@ -9,6 +9,7 @@ import SwiftUI
 import GooglePlacesSwift
 
 struct PlaceDetailModalView: View {
+    @EnvironmentObject var router: AppRouter
     @StateObject var viewModel: HomeViewModel
     let place: Place
     
@@ -62,6 +63,17 @@ struct PlaceDetailModalView: View {
                         }
                 }
                 .padding(.horizontal, 12)
+                
+                //　位置移動ボタン
+                if router.selectedTab == .bookmark {
+                    ActionButton(icon: "location.fill", text: "位置に移動する", color: .blue, isFullWidth: true) {
+                        router.selectedTab = .home
+                        router.selectedPlaceID = place.placeID
+                        router.location = place.location
+                        showModal = false
+                    }
+                    .padding(.horizontal, 12)
+                }
                 
                 // ボタン
                 ScrollView(.horizontal, showsIndicators: false) {

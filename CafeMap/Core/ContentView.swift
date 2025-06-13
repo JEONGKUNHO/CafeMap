@@ -8,26 +8,38 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject var router = AppRouter()
+    
     var body: some View {
-        TabView {
+        TabView(selection: $router.selectedTab) {
             HomeView()
                 .tabItem {
                     Label("ホーム", systemImage: "house")
                 }
+                .tag(TabViewType.home)
             
             BookMarkView()
                 .tabItem {
                     Label("ブックマーク", systemImage: "bookmark")
                 }
+                .tag(TabViewType.bookmark)
             
             MyPageView()
                 .tabItem {
                     Label("マイページ", systemImage: "person")
                 }
+                .tag(TabViewType.myPage)
         }
+        .environmentObject(router)
     }
 }
 
 #Preview {
     ContentView()
+}
+
+enum TabViewType: Int, Hashable {
+    case home = 0
+    case bookmark = 1
+    case myPage = 2
 }

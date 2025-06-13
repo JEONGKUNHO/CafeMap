@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MapKit
 import RealmSwift
 
 class Bookmark: Object, ObjectKeyIdentifiable {

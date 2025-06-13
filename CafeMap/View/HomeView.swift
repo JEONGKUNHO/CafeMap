@@ -9,6 +9,7 @@ import SwiftUI
 import MapKit
 
 struct HomeView: View {
+    @EnvironmentObject var router: AppRouter
     @StateObject private var viewModel = HomeViewModel()
     @StateObject private var locationManager = LocationManager()
     @State private var currentLocation: CLLocationCoordinate2D?
@@ -36,6 +37,9 @@ struct HomeView: View {
                                 .padding(.horizontal)
                                 .focused($isSearchFocused)
                                 .submitLabel(.search)
+                                .onChange(of: isSearchFocused) { _ in
+                                    reloadButtonClicked = false
+                                }
                                 .onSubmit {
                                     Task {
                                         if !searchText.isEmpty {
@@ -81,6 +85,14 @@ struct HomeView: View {
                     moveToUserLocation: $moveToUserLocation
                 )
                 .ignoresSafeArea(edges: .top)
+                .onReceive(router.$location.compactMap { $0 }) { location in
+                    isMapDragged = true
+                    Task {
+                        await viewModel.fetchDetailPlace(id: router.selectedPlaceID ?? String(), from: .bookmark)
+                        reloadButtonClicked = true
+                        searchedLocation = location
+                    }
+                }
                 
                 if isMapDragged {
                     Button("このエリアを検索") {

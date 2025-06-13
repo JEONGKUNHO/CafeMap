@@ -53,7 +53,7 @@ final class HomeViewModel: ObservableObject {
         }
     }
     
-    func fetchDetailPlace(id placeID: String) async {
+    func fetchDetailPlace(id placeID: String, from type: TabViewType = .home) async {
         let fetchPlaceRequest = FetchPlaceRequest(
             placeID: placeID,
             placeProperties: [.all]
@@ -64,6 +64,12 @@ final class HomeViewModel: ObservableObject {
         switch result {
         case .success(let fetchedPlace):
             placeDetail = fetchedPlace
+            if type == .bookmark {
+                places.removeAll()
+                if let place = placeDetail?.asCafePlace() {
+                    places.append(place)
+                }
+            }
         case .failure(let error):
             print("Place Detail API Error: \(error)")
         }
