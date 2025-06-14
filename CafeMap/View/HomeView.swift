@@ -97,10 +97,10 @@ struct HomeView: View {
                 if isMapDragged {
                     Button("このエリアを検索") {
                         Task {
-                            reloadButtonClicked = true
                             if let currentLocation = currentLocation {
                                 await viewModel.fetchNearbyPlaces(at: currentLocation)
                                 isMapDragged = false
+                                reloadButtonClicked = true
                             }
                         }
                     }

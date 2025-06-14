@@ -65,6 +65,7 @@ struct CustomMapView: UIViewRepresentable {
         }
         
         mapView.addAnnotations(annotations)
+        reloadButtonClicked = false
     }
     
     class Coordinator: NSObject, MKMapViewDelegate {
