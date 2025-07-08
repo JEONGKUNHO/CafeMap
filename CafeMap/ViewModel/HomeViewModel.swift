@@ -36,7 +36,7 @@ final class HomeViewModel: ObservableObject {
                 PlaceType(rawValue: "hamburger_restaurant"),
                 PlaceType(rawValue: "fast_food_restaurant")
             ],
-            regionCode: "jp"
+            regionCode: NSLocalizedString("region", comment: String())
         )
         
         let result = await PlacesClient.shared.searchNearby(with: searchNearbyRequest)

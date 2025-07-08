@@ -13,7 +13,7 @@ struct RatingView: View {
 
     var body: some View {
         HStack {
-            Text(title)
+            Text(NSLocalizedString(title, comment: String()))
                 .frame(width: 80, alignment: .leading)
             ForEach(1...5, id: \.self) { index in
                 Image(systemName: index <= rating ? "star.fill" : "star")

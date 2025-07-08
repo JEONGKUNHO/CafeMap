@@ -18,7 +18,7 @@ struct BookMarkView: View {
         NavigationView {
             List {
                 if bookmarks.isEmpty {
-                    Text("ブックマークがありません")
+                    Text("emptyBookmark")
                         .foregroundColor(.gray)
                 } else {
                     ForEach(bookmarks) { bookmark in
@@ -41,7 +41,7 @@ struct BookMarkView: View {
                     .onDelete(perform: deleteBookmark)
                 }
             }
-            .navigationTitle("ブックマーク")
+            .navigationTitle("bookmark")
         }
         .sheet(isPresented: $showPlaceModal) {
             if let place = viewModel.placeDetail {

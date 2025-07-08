@@ -66,7 +66,7 @@ struct PlaceDetailModalView: View {
                 
                 //　位置移動ボタン
                 if router.selectedTab == .bookmark {
-                    ActionButton(icon: "location.fill", text: "位置に移動する", color: .blue, isFullWidth: true) {
+                    ActionButton(icon: "location.fill", text: "moveToLocation", color: .blue, isFullWidth: true) {
                         router.selectedTab = .home
                         router.selectedPlaceID = place.placeID
                         router.location = place.location
@@ -82,25 +82,20 @@ struct PlaceDetailModalView: View {
                         
                         if let phone = place.internationalPhoneNumber,
                            let url = URL(string: "tel://\(phone)") {
-                            ActionButton(icon: "phone.fill", text: "電話", color: .blue) {
+                            ActionButton(icon: "phone.fill", text: "call", color: .blue) {
                                 UIApplication.shared.open(url)
                             }
                         }
                         
                         if let url = place.websiteURL {
-                            ActionButton(icon: "safari.fill", text: "Webサイト", color: .blue) {
+                            ActionButton(icon: "safari.fill", text: "website", color: .blue) {
                                 UIApplication.shared.open(url)
                             }
                         }
                         
-                        ActionButton(icon: "square.and.pencil", text: "レビューを書く", color: .blue) {
+                        ActionButton(icon: "square.and.pencil", text: "writeReview", color: .blue) {
                             showReviewWriteView = true
                         }
-                        
-                        ActionButton(icon: "camera.fill", text: "写真登録", color: .blue) {
-                            print("写真登録　tapped")
-                        }
-                        
                         Spacer().frame(width: 12)
                     }
                 }
@@ -116,7 +111,7 @@ struct PlaceDetailModalView: View {
                             HStack {
                                 Image(systemName: "clock")
                                     .foregroundColor(.gray)
-                                Text("営業時間")
+                                Text("operatingHours")
                                     .foregroundColor(.black)
                                 Spacer()
                                 Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
@@ -146,7 +141,7 @@ struct PlaceDetailModalView: View {
                 //　レビュー
                 VStack(alignment: .leading, spacing: 12) {
                     HStack {
-                        Text("レビュー")
+                        Text("review")
                             .font(.title3)
                             .fontWeight(.semibold)
                             .padding(.horizontal, 16)
@@ -155,7 +150,7 @@ struct PlaceDetailModalView: View {
                     }
                     
                     if viewModel.cafeReviews.isEmpty {
-                        Text("まだレビューがありません")
+                        Text("emptyReview")
                             .foregroundColor(.gray)
                             .padding(.horizontal, 16)
                     } else {

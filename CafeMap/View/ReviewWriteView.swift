@@ -22,7 +22,7 @@ struct ReviewWriteView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 32) {
             HStack {
-                Text("レビュー")
+                Text("review")
                     .font(.title2)
                     .bold()
                 Spacer()
@@ -33,18 +33,18 @@ struct ReviewWriteView: View {
                     }
             }
 
-            TextField("レビューを記入してください", text: $reviewText, axis: .vertical)
+            TextField("pleaseWriteReview", text: $reviewText, axis: .vertical)
                 .textFieldStyle(.roundedBorder)
                 .lineLimit(5, reservesSpace: true)
 
             VStack(alignment: .leading, spacing: 12) {
-                RatingView(title: "サービス", rating: $serviceRating)
-                RatingView(title: "清潔度", rating: $cleanlinessRating)
-                RatingView(title: "味", rating: $tasteRating)
+                RatingView(title: "service", rating: $serviceRating)
+                RatingView(title: "cleanliness", rating: $cleanlinessRating)
+                RatingView(title: "taste", rating: $tasteRating)
             }
             
             if showError {
-                Text(errorMessage)
+                Text(NSLocalizedString(errorMessage, comment: String()))
                     .foregroundColor(.red)
                     .font(.subheadline)
             }
@@ -54,7 +54,7 @@ struct ReviewWriteView: View {
             Button(action: {
                 Task {
                     if serviceRating == 0 || cleanlinessRating == 0 || tasteRating == 0 {
-                        errorMessage = "すべての項目に星をつけてください"
+                        errorMessage = "pleaseGiveStar"
                         showError = true
                     } else {
                         do {
@@ -68,13 +68,13 @@ struct ReviewWriteView: View {
                             await viewModel.fetchPlaceReview(id: placeID)
                             dismiss()
                         } catch {
-                            errorMessage = "DBエラーが発生しました"
+                            errorMessage = "dbError"
                             showError = true
                         }
                     }
                 }
             }) {
-                Text("作成する")
+                Text("write")
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()

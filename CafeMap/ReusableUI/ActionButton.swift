@@ -26,7 +26,7 @@ struct ActionButton: View {
         Button(action: action) {
             HStack {
                 Image(systemName: icon)
-                Text(text)
+                Text(NSLocalizedString(text, comment: String()))
             }
             .frame(maxWidth: isFullWidth ? .infinity : nil)
             .padding(.horizontal, 12)

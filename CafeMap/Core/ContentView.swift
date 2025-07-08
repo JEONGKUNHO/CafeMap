@@ -14,19 +14,19 @@ struct ContentView: View {
         TabView(selection: $router.selectedTab) {
             HomeView()
                 .tabItem {
-                    Label("ホーム", systemImage: "house")
+                    Label("home", systemImage: "house")
                 }
                 .tag(TabViewType.home)
             
             BookMarkView()
                 .tabItem {
-                    Label("ブックマーク", systemImage: "bookmark")
+                    Label("bookmark", systemImage: "bookmark")
                 }
                 .tag(TabViewType.bookmark)
             
             MyPageView()
                 .tabItem {
-                    Label("マイページ", systemImage: "person")
+                    Label("myPage", systemImage: "person")
                 }
                 .tag(TabViewType.myPage)
         }

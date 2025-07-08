@@ -29,7 +29,7 @@ struct HomeView: View {
                 VStack {
                     ZStack {
                         HStack {
-                            TextField(isSearchFocused ? String() : "🔎　ここで駅を検索", text: $searchText)
+                            TextField(isSearchFocused ? String() : "🔎　" + NSLocalizedString("searchByStation", comment: String()), text: $searchText)
                                 .padding(12)
                                 .background(Color.white)
                                 .cornerRadius(10)
@@ -95,7 +95,7 @@ struct HomeView: View {
                 }
                 
                 if isMapDragged {
-                    Button("このエリアを検索") {
+                    Button("searchThisArea") {
                         Task {
                             if let currentLocation = currentLocation {
                                 await viewModel.fetchNearbyPlaces(at: currentLocation)
@@ -123,6 +123,14 @@ struct HomeView: View {
                                 moveToUserLocation = true
                             }
                     }
+                }
+            } else {
+                VStack {
+                    Spacer()
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle())
+                        .padding()
+                    Spacer()
                 }
             }
         }
